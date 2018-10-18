@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.apap.tugas1.model.JabatanModel;
 import com.apap.tugas1.model.PegawaiModel;
+import com.apap.tugas1.service.InstansiService;
+import com.apap.tugas1.service.JabatanService;
 import com.apap.tugas1.service.PegawaiService;
+import com.apap.tugas1.service.ProvinsiService;
 
 
 @Controller
@@ -20,8 +23,20 @@ public class PegawaiController {
 	@Autowired
 	private PegawaiService pegawaiService;
 	
+	@Autowired
+	private ProvinsiService provinsiService;
+	
+	@Autowired
+	private InstansiService instansiService;
+	
+	@Autowired
+	private JabatanService jabatanService;
+	
 	@RequestMapping("/")
-	private String home() {
+	private String home(Model model) {
+		List<JabatanModel> jabatan = jabatanService.findAllJabatan();
+		model.addAttribute("JabatanList", jabatan);
+		model.addAttribute("title", "Home");
 		return "home";
 	}
 	@RequestMapping(value = "/pegawai")
@@ -30,8 +45,8 @@ public class PegawaiController {
 		List<JabatanModel> jabatanPegawai = pegawai.getJabatanPegawaiList();
 		double gajiPokokTerbesar = 0;
 		for(JabatanModel jabatan : jabatanPegawai) {
-			if(jabatan.getGaji_pokok() > gajiPokokTerbesar) {
-				gajiPokokTerbesar = jabatan.getGaji_pokok();
+			if(jabatan.getGajiPokok() > gajiPokokTerbesar) {
+				gajiPokokTerbesar = jabatan.getGajiPokok();
 			}
 		}
 		// gaji pokok + (%tunjangan x gaji pokok)

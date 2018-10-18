@@ -33,8 +33,26 @@
 									</form>
 								</div>
 							</div>
+							<div class="card mt-3">
+								<div class="card-body">
+									<h2>Lihat Detail Jabatan</h2>
+									<form th:method="GET" th:action="@{/jabatan/view}">
+										<div class="form-group">
+											<select class="form-control custom-select" id="jabatanInput" name="idJabatan" required>
+												<option selected disabled>Pilih Jabatan</option>
+												<th:block th:each="jabatan : ${JabatanList}">
+													<option th:value="${jabatan.id}" th:text="${jabatan.nama}"></option>
+												</th:block>
+											</select>
+										</div>
+										
+										<button type="submit" class="btn btn-primary">Lihat</button>
+									</form>
+								</div>
+							</div>
 						</div>
 					</div>
+
 				</div>
 			</div>
 		</div>
