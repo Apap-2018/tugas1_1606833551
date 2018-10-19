@@ -2,6 +2,7 @@ package com.apap.tugas1.model;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.*;
@@ -118,6 +119,11 @@ public class PegawaiModel implements Serializable {
 
 	public void setJabatanPegawaiList(List<JabatanModel> jabatanPegawaiList) {
 		this.jabatanPegawaiList = jabatanPegawaiList;
+	}
+	public int getUmur() {
+		LocalDate birthday = tanggalLahir.toLocalDate();
+		LocalDate now = LocalDate.now();
+		return now.getYear()-birthday.getYear();
 	}
 
 }

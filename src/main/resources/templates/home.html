@@ -48,6 +48,25 @@
 										
 										<button type="submit" class="btn btn-primary">Lihat</button>
 									</form>
+									<form th:method="GET" th:action="@{/jabatan/viewall}">
+										<button type="submit" class="btn btn-primary">Lihat Semua Jabatan</button>
+									</form>
+								</div>
+							</div>
+							<div class="card mt-3">
+								<div class="card-body">
+									<h2>Lihat Pegawai Termuda dan Tertua</h2>
+									<form th:method="GET" th:action="@{/pegawai/termuda-tertua}">
+										<div class="form-group">
+											<select class="form-control custom-select" id="instansiInput" name="idInstansi" required>
+												<option selected disabled>Pilih Instansi</option>
+												<th:block th:each="instansi : ${InstansiList}">
+													<option th:value="${instansi.id}" th:text="${instansi.nama}"></option>
+												</th:block>
+											</select>
+										</div>
+										<button type="submit" class="btn btn-primary">Lihat</button>
+									</form>
 								</div>
 							</div>
 						</div>

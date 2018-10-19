@@ -27,8 +27,17 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="card-body">            
-                <a th:href="@{/jabatan/ubah/} + ${jabatan.id}" class="btn btn-primary">Ubah</a>
+            <div class="card-body" style="display: flex; flex-direction:row;"> 
+            	<form th:action="@{/jabatan/ubah}" method="GET">
+					<input type=hidden name="idJabatan" th:value="${jabatan.id}" />
+					<button value="submit" class="btn  btn-primary" style="margin-right:1rem;margin-top:0.5rem;">Ubahh</button>
+				</form>
+    		
+    			<form th:action="@{/jabatan/hapus}" method="POST">
+					<input type="hidden" name="idJabatan" th:value="${jabatan.id}" />
+					<button type="submit" class="btn button btn-danger" style="margin-right:1rem;margin-top:0.5rem;">Hapuss</button>
+				</form> 
+				      
             </div>
         </div>
     </div>

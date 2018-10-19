@@ -29,4 +29,19 @@ public class JabatanServiceImpl implements JabatanService{
 	public Optional<JabatanModel> getJabatanDetailById(long id) {
 		return jabatanDb.findById(id);
 	}
+	@Override
+	public void deleteJabatan(JabatanModel jabatan) {
+		jabatanDb.delete(jabatan);
+	}
+	@Override
+	public void deleteJabatanById(long id) {
+		jabatanDb.deleteById(id);
+		
+	}
+	@Override
+	public JabatanModel getJabatanById(long id) {
+		return jabatanDb.getOne(id);
+	}
+	
+	
 }

@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.apap.tugas1.model.InstansiModel;
 import com.apap.tugas1.model.JabatanModel;
 import com.apap.tugas1.model.PegawaiModel;
 import com.apap.tugas1.service.InstansiService;
@@ -35,11 +37,13 @@ public class PegawaiController {
 	@RequestMapping("/")
 	private String home(Model model) {
 		List<JabatanModel> jabatan = jabatanService.findAllJabatan();
+		List<InstansiModel> instansi = instansiService.findAllInstansi();
 		model.addAttribute("JabatanList", jabatan);
+		model.addAttribute("InstansiList", instansi);
 		model.addAttribute("title", "Home");
 		return "home";
 	}
-	@RequestMapping(value = "/pegawai")
+	@RequestMapping(value = "/pegawai", method = RequestMethod.GET)
 	private String viewPegawai(@RequestParam("nip") String nip, Model model) {
 		PegawaiModel pegawai = pegawaiService.getPegawaiByNip(nip);
 		List<JabatanModel> jabatanPegawai = pegawai.getJabatanPegawaiList();
@@ -57,5 +61,19 @@ public class PegawaiController {
 		model.addAttribute("gajiPegawai", gajiPegawai);
 		return "view-pegawai";
 	}
+	@RequestMapping(value = "/pegawai/termuda-tertua", method = RequestMethod.GET)
+	private String terMudaTua(@RequestParam("idInstansi") long id, Model model) {
+		InstansiModel instansi = instansiService.getInstansiDetailById(id).get();
+		List<PegawaiModel> pegawaiInstansi = instansi.getPegawaiInstansiList();
+		
+		PegawaiModel termuda = pegawaiInstansi.get(0);
+		PegawaiModel tertua = pegawaiInstansi.get(0);
+		
+	
+		
+		return null;
+		
+	}
+	
 
 }
