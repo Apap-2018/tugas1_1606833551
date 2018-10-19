@@ -10,7 +10,7 @@
 <body>
 	<div id="Content" class="container-full-bg">
 		<div class="container vertical-center" style="padding-top: 32px;">
-			<h1 th:text="'Detail Jabatan - ' + ${jabatan.nama}"></h1>
+			<h1 th:text="'Ubah Jabatan - ' + ${jabatan.nama}"></h1>
 			<div class="card my-5">
 				<div class="container">
 					<form th:action="@{/jabatan/ubah}" th:object="${jabatan}" method="POST" style="padding-top:15px">

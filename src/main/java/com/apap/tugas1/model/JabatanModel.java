@@ -44,9 +44,18 @@ public class JabatanModel implements Serializable {
 	
 	@ManyToMany(fetch = FetchType.LAZY, 
 			cascade = {CascadeType.PERSIST,CascadeType.MERGE}, 
-			mappedBy = "jabatanPegawaiList")
+			mappedBy = "jabatanPegawaiList",targetEntity = PegawaiModel.class)
 	private List<PegawaiModel> pegawaiJabatanList;
-
+	
+	public List<PegawaiModel> getPegawai(){
+		return pegawaiJabatanList;
+		
+	}
+	public Integer getJumlahPegawai() {
+		return getPegawai().size();
+	}
+	
+	
 	public long getId() {
 		return Id;
 	}
