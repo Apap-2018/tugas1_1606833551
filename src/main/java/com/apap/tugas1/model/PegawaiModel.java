@@ -120,6 +120,18 @@ public class PegawaiModel implements Serializable {
 	public void setJabatanPegawaiList(List<JabatanModel> jabatanPegawaiList) {
 		this.jabatanPegawaiList = jabatanPegawaiList;
 	}
+	public double getGajiPokokPegawai() {
+		double gajiPokokTerbesar = 0;
+		//milih gaji pokok terbesar dari semua jabatan yg dimiliki pegawai
+		for (JabatanModel jabatan : this.getJabatanPegawaiList()) {
+			if(jabatan.getGajiPokok() > gajiPokokTerbesar) {
+				gajiPokokTerbesar = jabatan.getGajiPokok();
+			}
+		}
+		double gajiPegawai =  gajiPokokTerbesar + (gajiPokokTerbesar * this.getInstansi().getProvinsi().getPresentaseTunjangan()/100);
+		return gajiPegawai;
+	}
+	
 	public int getUmur() {
 		LocalDate birthday = tanggalLahir.toLocalDate();
 		LocalDate now = LocalDate.now();

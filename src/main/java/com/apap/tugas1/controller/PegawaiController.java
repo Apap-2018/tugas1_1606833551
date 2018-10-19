@@ -47,15 +47,15 @@ public class PegawaiController {
 	private String viewPegawai(@RequestParam("nip") String nip, Model model) {
 		PegawaiModel pegawai = pegawaiService.getPegawaiByNip(nip);
 		List<JabatanModel> jabatanPegawai = pegawai.getJabatanPegawaiList();
-		double gajiPokokTerbesar = 0;
-		for(JabatanModel jabatan : jabatanPegawai) {
-			if(jabatan.getGajiPokok() > gajiPokokTerbesar) {
-				gajiPokokTerbesar = jabatan.getGajiPokok();
-			}
-		}
+		//double gajiPokokTerbesar = 0;
+		//for(JabatanModel jabatan : jabatanPegawai) {
+		//	if(jabatan.getGajiPokok() > gajiPokokTerbesar) {
+		//		gajiPokokTerbesar = jabatan.getGajiPokok();
+		//	}
+		//}
 		// gaji pokok + (%tunjangan x gaji pokok)
-		int gajiPegawai = (int) ((int)gajiPokokTerbesar + (gajiPokokTerbesar * pegawai.getInstansi().getProvinsi().getPresentaseTunjangan()/100)); ;
-	
+		//int gajiPegawai = (int) ((int)gajiPokokTerbesar + (gajiPokokTerbesar * pegawai.getInstansi().getProvinsi().getPresentaseTunjangan()/100)); ;
+		double gajiPegawai = pegawai.getGajiPokokPegawai();
 		model.addAttribute("pegawai", pegawai);
 		model.addAttribute("jabatanPegawai", jabatanPegawai);
 		model.addAttribute("gajiPegawai", gajiPegawai);
@@ -65,13 +65,27 @@ public class PegawaiController {
 	private String terMudaTua(@RequestParam("idInstansi") long id, Model model) {
 		InstansiModel instansi = instansiService.getInstansiDetailById(id).get();
 		List<PegawaiModel> pegawaiInstansi = instansi.getPegawaiInstansiList();
-		
 		PegawaiModel termuda = pegawaiInstansi.get(0);
 		PegawaiModel tertua = pegawaiInstansi.get(0);
-		
-	
-		
-		return null;
+		for(int i = 0; i< pegawaiInstansi.size(); i++) {
+			if(pegawaiInstansi.get(i).getUmur()<termuda.getUmur()) {
+				termuda = pegawaiInstansi.get(i);
+			}
+			else if (pegawaiInstansi.get(i).getUmur()>tertua.getUmur()) {
+				tertua = pegawaiInstansi.get(i);
+			}
+		}
+		double gajiTermuda = termuda.getGajiPokokPegawai();
+		double gajiTertua = tertua.getGajiPokokPegawai();
+		List<JabatanModel> jabatanTermuda = termuda.getJabatanPegawaiList();
+		List<JabatanModel> jabatanTertua = tertua.getJabatanPegawaiList();
+		model.addAttribute("termuda", termuda);
+		model.addAttribute("tertua", tertua);
+		model.addAttribute("jabatanTermuda", jabatanTermuda);
+		model.addAttribute("jabatanTertua", jabatanTertua);
+		model.addAttribute("gajiTermuda", gajiTermuda);
+		model.addAttribute("gajiTertua", gajiTertua);
+		return "view-tertua-termuda";
 		
 	}
 	
