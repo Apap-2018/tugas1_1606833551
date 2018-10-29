@@ -6,6 +6,8 @@
 <title id="page-title" th:text="'Ubah pegawai - ' + ${pegawai.nama}"></title>
 <object th:include="fragments/fragment :: css" th:remove="tag"></object>
 <object th:include="fragments/fragment :: js" th:remove="tag"></object>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
 </head>
 <body>
 	<div id="Content" class="container-full-bg">
@@ -17,9 +19,10 @@
 						method="POST" style="padding-top: 15px">
 						<input type="hidden" th:field="*{id}" />
 						<div class="form-group">
-							<label for="nama">Nama :</label> <input type="text" name="nama"
-								class="form-control" th:field="*{nama}">
+							<label for="nama">Nama :</label> 
+							<input type="text" name="nama" class="form-control" th:field="*{nama}">
 						</div>
+					
 						<div class="form-group">
 							<label for="tempatLahir">Tempat Lahir :</label> <input
 								type="text" name="tempatLahir" class="form-control"
@@ -35,57 +38,66 @@
 								name="tahunMasuk" class="form-control" th:field="*{tahunMasuk}">
 						</div>
 						<div class="form-group">
-							<label for="provinsi">Provinsi :</label> <select
-								class="form-control" id="provinsi">
-								<option th:value="*{instansi.provinsi.id}" selected="selected"
-									th:text="*{instansi.provinsi.nama}"></option>
-								<option th:each="provinsi : ${ProvinsiList}"
-									th:value="${provinsi.getId()}" th:text="${provinsi.getNama()}"></option>
-							</select>
+    						<label for="provinsi">Provinsi</label>
+    						<select  class="form-control" required="required" name="provinsi" id="provinsi" >
+							     	<option th:each="provinsi : ${ProvinsiList}" th:value="${provinsi.id}" th:text="${provinsi.nama}" th:selected="${provinsi.id} == *{instansi.provinsi.id}" ></option>
+						    </select>
 						</div>
+						
 						<div class="form-group">
-							<label for="pilihProvinsi">Provinsi</label> 
-							<select class="form-control" required name="provinsi" id="provinsiFilter" onchange="filter(this.value)">
-								<option th:value="*{instansi.provinsi.id}" selected="selected" th:text="*{instansi.provinsi.nama}"></option>
-								<option th:each="provinsiItem : ${ProvinsiList}" th:value="${provinsiItem.id}" th:text="${provinsiItem.nama}"></option>
-							</select>
+    						<label for="instansi">Instansi :</label>
+    						<select  class="form-control" required="required" name="instansi" id="instansi">
+								<option th:each="instansi : ${InstansiList}" th:value="${instansi.id}" th:text="${instansi.nama} + ' - ' + ${instansi.provinsi.nama} + ${instansi.provinsi.id}" th:selected="${pegawai.instansi.id==instansi.id}"></option>
+						    </select>
 						</div>
-						<div class="form-group">
-							<label for="instansi">Instansi :</label> <select
-								class="form-control" id="instansi" name="instansi"
-								th:field="*{instansi}">
-								<option th:value="*{instansi.id}" selected="selected"
-									th:text="*{instansi.nama}"></option>
-							</select>
+						
+						<div class="card bg-light mb-3" >
+  							<div class="card-header">Jabatan</div>
+  								<div class="card-body">
+									<div class="form-inline mb-2" 
+									th:each="jabatan,rowStat : *{jabatanPegawaiList}">
+										<div class="input-group mb-2">
+										<select class="form-control" id="pilihJabatan" th:field="*{jabatanPegawaiList[__${rowStat.index}__]}">
+											<option th:each="jabatanItem: ${JabatanList}"
+													th:text="${jabatanItem.getNama()}" 
+													th:value="${jabatanItem.id}"></option>
+										</select>
+											<div class="input-group-addon">
+												<button class="btn btn-danger" th:value="${rowStat.index}" type="submit" name="deleteRow">X</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							<div class="card-footer">
+    							<button class="btn btn-secondary"  type="submit" name="addRow">Add Jabatan</button>
+ 							 </div>
 						</div>
-
-						<div class="form-group">
-							<label for="jabatan">Jabatan:</label>
-							<div th:each="jabatan,iterationStats : ${JabatanList}"
-								style="padding: 10px">
-								<select class="form-control"
-									th:field="*{JabatanList[__${iterationStats.index}__]}">
-									<option th:each="jabatanItem : ${JabatanList}"
-										th:value="${jabatanItem.id}" th:text="${jabatanItem.nama}"></option>
-								</select>
-
-							</div>
-							<button type="submit" name="addRow" class="btn">Tambah
-								Jabatan Lainnya</button>
-
-						</div>
-
-
-						<div class="card-body">
-							<input type="submit" name="submit" class="btn btn-primary"
-								value="Tambah">
-						</div>
+						<button type="submit" name="submitPegawai" class="btn btn-primary">Submit</button>	
 					</form>
 				</div>
 			</div>
 		</div>
 	</div>
 </body>
+<script th:inline="javascript">
+	$('#provinsi').change(
+	     function() {
+	         $.getJSON("/instansi/getFromProvinsi", {
+	             provinsiId : $(this).val(),
+	             console.log(provinsiId);
+	             ajax : 'true'
+	         }, function(data) {
+	             var html = '<option value=""></option>';
+	             var len = data.length;
+	             for ( var i = 0; i < len; i++) {
+	                 html += '<option value="' + data[i].id + '">'
+	                         + data[i].nama + '</option>';
+	             }
+	             html += '</option>';
+	             $('#instansi').html(html);
+	         });
+	     });
+	</script>
 </html>
 
 

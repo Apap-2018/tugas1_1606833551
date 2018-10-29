@@ -28,6 +28,7 @@ public class PegawaiServiceImpl implements PegawaiService{
 		return pegawaiDb.findByNip(nip);
 	}
 
+
 	@Override
 	public List<PegawaiModel> findAllPegawai() {
 		// TODO Auto-generated method stub
@@ -65,54 +66,11 @@ public class PegawaiServiceImpl implements PegawaiService{
 			nip += urutan;
 		}
 
-		//for (JabatanModel jabatan:pegawai.getJabatanPegawaiList()) {
-		//	System.out.println(jabatan.getNama());
-		//}
+		
 		pegawai.setNip(nip);
 
-		/**
-		//int urutan = 1;
-		List<PegawaiModel> listPegawai = pegawaiDb.findByInstansi(pegawai.getInstansi());
-		for (PegawaiModel oPegawai : listPegawai) {
-			if (pegawai.getTanggalLahir().equals(oPegawai.getTanggalLahir()))
-				urutan++;
-		}
 		
-		String strUrutan = "";
-		if (urutan<10) {
-			strUrutan = "0" + urutan;
-		}
-		
-		String nip = pegawai.getInstansi().getId()+""+newDateFormat+
-					pegawai.getTahunMasuk()+""+strUrutan;
-		pegawai.setNip(nip);
-		*/
 	}
-	/**
-	 * 
-	 
-	String nip = "";
 	
-	nip += pegawai.getInstansi().getId();
-	
-	String[] tglLahir = pegawai.getTanggalLahir().toString().split("-");
-	String tglLahirString = tglLahir[2] + tglLahir[1] + tglLahir[0].substring(2, 4);
-	nip += tglLahirString;
-
-	nip += pegawai.getTahunMasuk();
-
-	int counterSama = 1;
-	for (PegawaiModel pegawaiInstansi:pegawai.getInstansi().getPegawaiInstansi()) {
-		if (pegawaiInstansi.getTahunMasuk().equals(pegawai.getTahunMasuk()) && pegawaiInstansi.getTanggalLahir().equals(pegawai.getTanggalLahir())) {
-			counterSama += 1;
-		}	
-	}
-	nip += "0" + counterSama;
-
-	for (JabatanModel jabatan:pegawai.getJabatanList()) {
-		System.out.println(jabatan.getNama());
-	}
-	pegawai.setNip(nip);
-	*/
 
 }

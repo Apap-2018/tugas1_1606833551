@@ -4,8 +4,10 @@
 <head>
 	<meta charset="ISO-8859-1">
 		<object th:include="fragments/fragment :: css" th:remove="tag"></object>
-		<object th:include="fragments/fragment :: js" th:remove="tag"></object>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<object th:include="fragments/fragment :: js" th:remove="tag"></object>
+		
+		
 	<title id="page-title" th:text="'Tambah Jabatan'"></title>
 </head>
 <body>
@@ -33,18 +35,20 @@
 								name="tahunMasuk" class="form-control">
 						</div>
 						<div class="form-group">
-							<label for="pilihProvinsi">Provinsi</label> 
+							<label for="provinsi">Provinsi</label> 
 							
-							<select class="form-control" required name="provinsi" id="provinsiFilter" onchange="filter(this.value)">
+							<select class="form-control" required name="provinsi" id="provinsi">
 								<option value="">-</option>
 								<option th:each="provinsi : ${ProvinsiList}" th:value="${provinsi.id}" th:text="${provinsi.nama}"></option>
 							</select>
 						</div>
 						
-						<div class="form-group">
-							<label for="pilihInstansi">Instansi :</label> 
 						
-							<select class="form-control" required name="instansi" id="instansiFilter" th:field="*{instansi}">
+						
+						<div class="form-group">
+							<label for="instansi">Instansi :</label> 
+						
+							<select class="form-control" required name="instansi" id="instansi" th:field="*{instansi}">
 								<option value="">-</option>
 								<option th:data-id-provinsi="${instansi.provinsi.id}" th:each="instansi : ${InstansiList}" th:value="${instansi.id}" th:text="${instansi.nama}+' - '+${instansi.provinsi.nama}"></option>
 							</select>
@@ -78,19 +82,28 @@
 			</div>
 		</div>
 	</div>
-</body>
-<script>
-	$(document).ready(function() {
-		filter(document.getElementById("provinsiFilter").value);
-	});
-	function filter(keyword) {
-		var select = document.getElementById("instansiFilter");
-		for (var i = 1; i < select.length; i++) {
-			var txt = select.options[i].getAttribute('data-id-provinsi');
-			var include = txt.startsWith(keyword);
-			select.options[i].style.display = include ? 'list-item' : 'none';
-		}
+	<script type="text/javascript">
+	$(document).ready(function(){
+		$('#provinsi').change(
+			     function() {
+			    	 console.log("masuk")
+			    	 console.log($(this).val());
+			         $.getJSON("/instansi/getInstansiByProvinsi", {
+			             idProvinsi : $(this).val(),
+			             ajax : 'true'
+			         }, function(data) {
+			             var html = '<option value="">-- Pilih Instansi --</option>';
+			             var size = data.length;
+			             for ( var i = 0; i < size; i++) {
+			                 html += '<option value="' + data[i].id + '">' + data[i].nama + '</option>';
+			             }
+			             $('#instansi').html(html);
+			         });
+			     });
 	}
-</script>
+	
+	</script>
+</body>
+
 
 </html>

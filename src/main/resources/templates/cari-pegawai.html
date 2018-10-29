@@ -4,23 +4,18 @@
 <head>
 <meta charset="ISO-8859-1">
 <title id="page-title" th:text="'cari pegawai'"></title>
-<link rel="stylesheet" type="text/css"
-	href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.css">
-
-<script type="text/javascript" charset="utf8"
-	src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.js"></script>
-<link rel="stylesheet" type="text/css"
-	th:href="@{//cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css}" />
-<link rel="stylesheet" type="text/css"
-	href="DataTables/datatables.min.css" />
-
+<!-- pagination -->
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+	
+  
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+	
 <script>
 	$(document).ready(function() {
 		$('#searchResult').DataTable();
 	});
 </script>
-<object th:include="fragments/fragment :: css" th:remove="tag"></object>
-<object th:include="fragments/fragment :: js" th:remove="tag"></object>
+
 </head>
 <body>
 	<div id="Content" class="container-full-bg">
@@ -144,6 +139,9 @@
 
 				});
 			</script>
+			</div>
+			</div>
+			
 </body>
 
 <script>

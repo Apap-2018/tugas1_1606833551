@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.apap.tugas1.model.InstansiModel;
@@ -128,7 +129,9 @@ public class PegawaiController {
 	@RequestMapping(value = "/pegawai/ubah", method = RequestMethod.GET)
 	private String ubahPegawai(@RequestParam(value = "nip") String nip, Model model) {
 		PegawaiModel pegawai = pegawaiService.getPegawaiByNip(nip);
-
+		if(pegawai.getJabatanPegawaiList().size()==0) {
+			pegawai.getJabatanPegawaiList().add(new JabatanModel());
+		}
 		List<JabatanModel> jabatan = jabatanService.findAllJabatan();
 		List<ProvinsiModel> provinsi = provinsiService.findAllProvinsi();
 		List<InstansiModel> instansi = instansiService.findAllInstansi();
@@ -169,13 +172,26 @@ public class PegawaiController {
 	public String ubahPegawaiSubmit(@ModelAttribute PegawaiModel pegawai, Model model, BindingResult result,
 			RedirectAttributes redirectAttrs) {
 		pegawaiService.generateNip(pegawai);
+		System.out.println(pegawai.getInstansi().getProvinsi().getId());
 		pegawaiService.addPegawai(pegawai);
+		//System.out.println(pegawai.getInstansi().getProvinsi().getId());
 		String message = "Pegawai bernama " + pegawai.getNama() + " dengan NIP: " + pegawai.getNip()
 				+ " berhasil diubah";
 		model.addAttribute("msg", message);
 		return "add";
 	}
-
+	@RequestMapping(value = "/instansi/getFromProvinsi", method = RequestMethod.GET)
+	@ResponseBody
+	public List<InstansiModel> getInstansi(@RequestParam (value = "provinsiId", required = true) int provinsiId) {
+	    ProvinsiModel provinsi = provinsiService.getProvinsiById(provinsiId);
+		return instansiService.getInstansiByProvinsi(provinsi);
+	}
+	/**
+	 * fitur tertua termuda
+	 * @param id
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/pegawai/termuda-tertua", method = RequestMethod.GET)
 	private String terMudaTua(@RequestParam("idInstansi") long id, Model model) {
 		InstansiModel instansi = instansiService.getInstansiDetailById(id).get();
@@ -212,6 +228,9 @@ public class PegawaiController {
 		model.addAttribute("listJabatan", jabatanService.findAllJabatan());
 
 		List<PegawaiModel> listPegawai = pegawaiService.findAllPegawai();
+		if ((idProvinsi == null) && (idInstansi == null) && (idJabatan == null )) {
+			listPegawai = null;
+		}
 
 		if ((idProvinsi == null || idProvinsi.equals("")) && (idInstansi == null || idInstansi.equals(""))
 				&& (idJabatan == null || idJabatan.equals(""))) {
