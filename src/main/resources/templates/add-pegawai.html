@@ -1,69 +1,96 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{components/BasePage :: basepage}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{components/BasePage :: basepage}">
 <head>
-    <title id="page-title" th:text="'Tambah Jabatan'"></title>
+	<meta charset="ISO-8859-1">
+		<object th:include="fragments/fragment :: css" th:remove="tag"></object>
+		<object th:include="fragments/fragment :: js" th:remove="tag"></object>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<title id="page-title" th:text="'Tambah Jabatan'"></title>
 </head>
 <body>
-<div id="Content" class="container-full-bg">
-    <div class="container vertical-center" style="padding-top: 32px;">
-        <h1 th:text="'Tambah Pegawai'"></h1>
-        <div class="card my-5">
-        	<div class="container">
-        		<form th:action="@{/pegawai/tambah}" th:object="${pegawai}" method="POST" style="padding-top:15px">
-            	<div class="form-group">
-            		<label for="nama">Nama :</label>
-            		<input type="text" name="nama" class="form-control">
-            	</div>
-            	<div class="form-group">
-            		<label for="tempatLahir">Tempat Lahir :</label>
-            		<input type="text" name="tempatLahir" class="form-control">
-            	</div>
-            	<div class="form-group">
-            		<label for="tanggalLahir">Tanggal Lahir :</label>
-            		<input type="date" name="tanggalLahir" class="form-control">
-            	</div>
-            	<div class="form-group">
-            		<label for="tahunMasuk">Tahun Masuk :</label>
-            		<input type="text" name="tahunMasuk" class="form-control">
-            	</div>
-            	<div class="form-group">
-            		<label for="provinsi">Provinsi :</label>
-            		<select class="form-control" id="provinsi">
-            		  <option disabled="disabled" selected="selected" >Pilih Provinsi</option>
-					  <option th:each="provinsi : ${ProvinsiList}" 
-					          th:value="${provinsi.getId()}" 
-					          th:text="${provinsi.getNama()}"></option>
-					</select>
-            	</div>
-            	<div class="form-group">
-            		<label for="instansi">Instansi :</label>
-            		<select class="form-control" id="instansi" name="instansi">
-					  <option disabled="disabled" selected="selected" >Pilih Instansi</option>
-					</select>
-            	</div>
-            	
-            	<div class="form-group">
-            		<label for="jabatan">Jabatan:</label>
-            		<div th:each="jabatan,iterationStats : *{jabatanPegawaiList}" style="padding:10px">
-            			<select class="form-control" th:field="*{jabatanPegawaiList[__${iterationStats.index}__]}" >
-					  		<option th:each="jabatann : ${JabatanList}" th:value="${jabatann.id}" th:text="${jabatann.nama}" ></option>
-						</select>
+	<div id="Content" class="container-full-bg">
+		<div class="container vertical-center" style="padding-top: 32px;">
+			<h1 th:text="'Tambah Pegawai'"></h1>
+			<div class="card my-5">
+				<div class="container">
+					<form th:action="@{/pegawai/tambah}" th:object="${pegawai}"
+						method="POST" style="padding-top: 15px">
+						<div class="form-group">
+							<label for="nama">Nama :</label> <input type="text" name="nama"
+								class="form-control">
+						</div>
+						<div class="form-group">
+							<label for="tempatLahir">Tempat Lahir :</label> <input
+								type="text" name="tempatLahir" class="form-control">
+						</div>
+						<div class="form-group">
+							<label for="tanggalLahir">Tanggal Lahir :</label> <input
+								type="date" name="tanggalLahir" class="form-control">
+						</div>
+						<div class="form-group">
+							<label for="tahunMasuk">Tahun Masuk :</label> <input type="text"
+								name="tahunMasuk" class="form-control">
+						</div>
+						<div class="form-group">
+							<label for="pilihProvinsi">Provinsi</label> 
+							
+							<select class="form-control" required name="provinsi" id="provinsiFilter" onchange="filter(this.value)">
+								<option value="">-</option>
+								<option th:each="provinsi : ${ProvinsiList}" th:value="${provinsi.id}" th:text="${provinsi.nama}"></option>
+							</select>
+						</div>
 						
-            		</div>
-            		<button type="submit" name="addRow" class="btn">Tambah Jabatan Lainnya</button>
-            		
-            	</div>
-            	
-            	
-            	<div class="card-body">
-                	<input type="submit" name="submit" class="btn btn-primary"  value="Tambah">
-            	</div>
-            </form>
-        	</div> 
-        </div>
-    </div>
-
-</div>
-
+						<div class="form-group">
+							<label for="pilihInstansi">Instansi :</label> 
+						
+							<select class="form-control" required name="instansi" id="instansiFilter" th:field="*{instansi}">
+								<option value="">-</option>
+								<option th:data-id-provinsi="${instansi.provinsi.id}" th:each="instansi : ${InstansiList}" th:value="${instansi.id}" th:text="${instansi.nama}+' - '+${instansi.provinsi.nama}"></option>
+							</select>
+						</div>
+						
+						
+						
+						<div class="card bg-light mb-3" >
+  							<div class="card-header">Jabatan</div>
+  								<div class="card-body">
+									<div class="form-inline mb-2" th:each="jabatan,rowStat : *{jabatanPegawaiList}">
+										<div class="input-group mb-2">
+										<select class="form-control" id="pilihJabatan" th:field="*{jabatanPegawaiList[__${rowStat.index}__]}">
+											<option th:each="jabatanItem: ${JabatanList}"
+													th:text="${jabatanItem.getNama()}" 
+													th:value="${jabatanItem.id}"></option>
+										</select>
+											<div class="input-group-addon">
+												<button class="btn btn-danger" th:value="${rowStat.index}" type="submit" name="deleteRow">X</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							<div class="card-footer">
+    							<button class="btn btn-secondary"  type="submit" name="addRow">Add Jabatan</button>
+ 							 </div>
+						</div>
+						<button type="submit" name="submitPegawai" class="btn btn-primary">Submit</button>	
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
+<script>
+	$(document).ready(function() {
+		filter(document.getElementById("provinsiFilter").value);
+	});
+	function filter(keyword) {
+		var select = document.getElementById("instansiFilter");
+		for (var i = 1; i < select.length; i++) {
+			var txt = select.options[i].getAttribute('data-id-provinsi');
+			var include = txt.startsWith(keyword);
+			select.options[i].style.display = include ? 'list-item' : 'none';
+		}
+	}
+</script>
+
 </html>

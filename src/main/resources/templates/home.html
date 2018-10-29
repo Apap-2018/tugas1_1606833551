@@ -58,7 +58,7 @@
 											<select class="form-control custom-select" id="instansiInput" name="idInstansi" required>
 												<option selected disabled>Pilih Instansi</option>
 												<th:block th:each="instansi : ${InstansiList}">
-													<option th:value="${instansi.id}" th:text="${instansi.nama}"></option>
+													<option th:value="${instansi.id}"  th:text="${instansi.nama}+' - '+${instansi.provinsi.nama}"></option>
 												</th:block>
 											</select>
 										</div>
