@@ -24,12 +24,11 @@ public class InstansiController {
 	@Autowired
 	private ProvinsiService provinsiService;
 
-	@RequestMapping(value = "/instansi/getInstansiByProvinsi", method = RequestMethod.GET)
+	@RequestMapping(value = "/instansi/getFromProvinsi", method = RequestMethod.GET)
 	@ResponseBody
-	public List<InstansiModel> getInstansi(@RequestParam (value = "idProvinsi", required = true) long idProvinsi, Model model) {
-		System.out.println("masuk fungsi list");
+	public List<InstansiModel> getInstansiByProvinsi(@RequestParam (value = "idProvinsi", required = true) long idProvinsi, Model model) {
 		ProvinsiModel provinsi = provinsiService.getProvinsiById(idProvinsi);
-		System.out.println(provinsi.getNama());
+		List<InstansiModel> listInstansi = provinsi.getInstansiProvinsiList();
 	    return instansiService.getInstansiByProvinsi(provinsi);
 	}
 	

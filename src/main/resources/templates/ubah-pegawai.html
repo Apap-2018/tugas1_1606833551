@@ -47,7 +47,7 @@
 						<div class="form-group">
     						<label for="instansi">Instansi :</label>
     						<select  class="form-control" required="required" name="instansi" id="instansi">
-								<option th:each="instansi : ${InstansiList}" th:value="${instansi.id}" th:text="${instansi.nama} + ' - ' + ${instansi.provinsi.nama} + ${instansi.provinsi.id}" th:selected="${pegawai.instansi.id==instansi.id}"></option>
+								<option th:each="instansi : ${InstansiList}" th:value="${instansi.id}" th:text="${instansi.nama} + ' - ' + ${instansi.provinsi.nama}" th:selected="${pegawai.instansi.id==instansi.id}"></option>
 						    </select>
 						</div>
 						

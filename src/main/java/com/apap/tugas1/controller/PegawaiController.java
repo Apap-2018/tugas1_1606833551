@@ -180,12 +180,7 @@ public class PegawaiController {
 		model.addAttribute("msg", message);
 		return "add";
 	}
-	@RequestMapping(value = "/instansi/getFromProvinsi", method = RequestMethod.GET)
-	@ResponseBody
-	public List<InstansiModel> getInstansi(@RequestParam (value = "provinsiId", required = true) int provinsiId) {
-	    ProvinsiModel provinsi = provinsiService.getProvinsiById(provinsiId);
-		return instansiService.getInstansiByProvinsi(provinsi);
-	}
+	
 	/**
 	 * fitur tertua termuda
 	 * @param id
